@@ -1,0 +1,53 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+}
+
+@using CSV_reader_2.Models;
+@using System.Globalization;
+
+@model List<Person>
+
+
+<h3>Выберите файл для загрузки</h3>
+@using (Html.BeginForm("Index", "Home", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    <input type="file" name="upload" />
+    <br>
+    <input type="submit" value="Загрузить" />
+}
+@if (Model != null)
+{
+    <table class="table table-striped" id="myTable">
+        <thead>
+            <tr>
+                <th role="button" scope="col" onclick="sortTable(0,true)">ID</th>
+                <th role="button" scope="col" onclick="sortTable(1,false)">Name</th>
+                <th role="button" scope="col" onclick="sortTable(2,false)">Date of birth</th>
+                <th role="button" scope="col" onclick="sortTable(3,false)">Married</th>
+                <th role="button" scope="col" onclick="sortTable(4,false)">Phone</th>
+                <th role="button" scope="col" onclick="sortTable(5,true)">Salary</th>
+            </tr>
+        </thead>
+        <tbody>
+
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td scope="row">@item.ID</td>
+                    <td>@item.Name</td>
+                    <td>@item.DateOfBirth.ToString("yyyy-MM-dd")</td>
+                    <td>@item.Married.ToString().ToLower()</td>
+                    <td>@item.Phone</td>
+                    <td>@item.Salary.ToString(CultureInfo.InvariantCulture)</td>
+                    <td>
+                        <input type="button" class="btn btn-info" name="name" value="Edit" onclick="editPerson(@item.ID)"/>
+                    </td>
+                </tr>
+            }
+
+        </tbody>
+    </table>
+}
+
+
+<script src="~/Scripts/MyScripts/Table.js"></script>
