@@ -26,14 +26,15 @@ namespace CSV_reader_2.Controllers
             if (upload == null)
                 return View(db.Persons.ToList());
 
-            string fileName = upload.FileName;
-            upload.SaveAs(Server.MapPath("~/Files/" + fileName));
-            db.Persons.AddRange(new CsvPerson().GetPersonFromCsv(Server.MapPath("~/Files/" + fileName)));
+            string fileMap = Server.MapPath("~/Files/" +  upload.FileName);
+            upload.SaveAs(fileMap);
+            db.Persons.AddRange(new CsvPerson().GetPersonFromCsv(fileMap));
             db.SaveChanges();            
 
             return View(db.Persons.ToList());
         }
 
+        [HttpPost]
         public void Edit(int id, string name, string data, string married, string phone, string salary)
         {
             db.Persons.Find(id).Copy(new Person(id, name, data, married, phone, salary));

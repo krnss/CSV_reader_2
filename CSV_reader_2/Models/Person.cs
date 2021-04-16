@@ -8,9 +8,7 @@ namespace CSV_reader_2.Models
 {
     public class Person : IPerson
     {
-        public Person()
-        {
-        }
+        public Person(){}
         public Person(int id, string name, DateTime dateOfBirth, bool married, string phone, decimal salary)
         {
             ID = id;
@@ -22,7 +20,6 @@ namespace CSV_reader_2.Models
         }
         public Person(int id, string name, string dateOfBirth, string married, string phone, string salary)
         {
-
             ID = id;
             Name = name;
 

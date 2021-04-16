@@ -13,20 +13,13 @@ namespace CSV_reader_2.CSV
 {
     public class CsvPerson
     {
-        public List<Person> GetPersonFromCsv(string roadToFile)
+        public IEnumerable<Person> GetPersonFromCsv( string roadToFile)
         {
-            List<Person> people = new List<Person>();
-
             using (var reader = new StreamReader(roadToFile))
             using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
             {
-                var records = csv.GetRecords<Person>();
-
-                foreach (var item in records)                
-                    people.Add(item);
-                
-            }            
-            return people;
+                return csv.GetRecords<Person>();              
+            }
         } 
     }
 }
