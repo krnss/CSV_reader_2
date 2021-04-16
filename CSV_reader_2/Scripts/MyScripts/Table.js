@@ -24,26 +24,26 @@
                 break;                
             }
         }
+        switching = true;
         if (shouldSwitch) {
             rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
-            switching = true;
-
             switchcount++;
+
         } else if (switchcount == 0 && dir == "asc") {
             dir = "desc";
-            switching = true;            
-        }
+        } else
+            switching = false;
     }
 }
 
 function getText(td) {
-    if (td.getElementsByTagName('input').length > 0) {
-        if (td.getElementsByTagName('input')[0].type == "checkbox")
-            return td.firstChild.checked + "";
-        else
-            return td.firstChild.value.trim();
-    }
-    return td.innerHTML.trim();
+    if (td.getElementsByTagName('input').length == 0)
+        return td.innerHTML.trim();
+
+    if (td.getElementsByTagName('input')[0].type == "checkbox")
+        return td.firstChild.checked + "";
+
+    return td.firstChild.value.trim();  
 }
 
 function editPerson(id) {
@@ -55,13 +55,13 @@ function editPerson(id) {
         var td = rows[i].getElementsByTagName("TD");
         if (td[0].innerHTML == id) {
             for (let j = 1; j < td.length - 1; j++) {
-
                 var input = document.createElement('input');
                 input.style.maxWidth = maxWidtharr[j];
 
                 let s = td[j].innerHTML.trim();
                 input.type = tdTape[j];
                 input.value = s;
+
                 if (j == 3)
                     input.checked = s == "true";
 
@@ -78,7 +78,6 @@ function editPerson(id) {
 function saveBook(id) {
     var datatext = [];
     var rows = document.getElementById("myTable").getElementsByTagName("TR");
-    datatext[0] = id;
 
     for (i = 1; i < rows.length; i++) {
         var td = rows[i].getElementsByTagName("TD");
@@ -97,22 +96,21 @@ function saveBook(id) {
 
             var edit = td[td.length - 1].getElementsByTagName("input")[0];
             edit.value = "Edit";
-            edit.onclick = () => { EditBook(id) };
-
-            $.ajax({
-                type: "POST",
-                url: "/Home/Edit",
-                data: {
-                    'id': id,
-                    'name': datatext[1],
-                    'data': datatext[2],
-                    'married': datatext[3],
-                    'phone': datatext[4],
-                    'salary': datatext[5]
-                }
-            });
-            
+            edit.onclick = () => { EditBook(id) };            
             break;
         }
     }
+
+    $.ajax({
+        type: "POST",
+        url: "/Home/Edit",
+        data: {
+            'id': id,
+            'name': datatext[1],
+            'data': datatext[2],
+            'married': datatext[3],
+            'phone': datatext[4],
+            'salary': datatext[5]
+        }
+    });
 }
