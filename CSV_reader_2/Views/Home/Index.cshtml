@@ -9,12 +9,19 @@
 
 
 <h3>Выберите файл для загрузки</h3>
-@using (Html.BeginForm("Index", "Home", FormMethod.Post, new { enctype = "multipart/form-data" }))
-{
-    <input type="file" name="upload" />
-    <br>
-    <input type="submit" value="Загрузить" />
+@using (Html.BeginForm("Index", "Home", FormMethod.Post, new { enctype = "multipart/form-data", @class = "md-form" }))
+{   
+    <div class="input-group mb-3">
+        <div class="form-group">
+           
+            <input type="file" class="form-control-file">
+        </div>
+        <div class="input-group-append">            
+            <input type="submit" value="Загрузить" class="btn btn-default" />
+        </div>
+    </div>    
 }
+
 @if (Model != null)
 {
     <table class="table table-striped" id="myTable">
@@ -40,7 +47,8 @@
                     <td>@item.Phone</td>
                     <td>@item.Salary.ToString(CultureInfo.InvariantCulture)</td>
                     <td>
-                        <input type="button" class="btn btn-info" name="name" value="Edit" onclick="editPerson(@item.ID)"/>
+                        <input type="button" class="btn btn-info" name="name" value="Edit" onclick="editPerson(@item.ID)" />
+                        <input type="button" class="btn btn-danger" name="name" value="Delete" onclick="deletePerson(@item.ID)" />
                     </td>
                 </tr>
             }
@@ -48,6 +56,7 @@
         </tbody>
     </table>
 }
+@Html.ActionLink("Скачати", "GetFile", "Home", new { @class = "btn btn-success" })
 
 
 <script src="~/Scripts/MyScripts/Table.js"></script>

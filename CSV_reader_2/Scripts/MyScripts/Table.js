@@ -47,15 +47,15 @@ function getText(td) {
 }
 
 function editPerson(id) {
-    let maxWidtharr = ["150px", "150px", "150px", "50px", "150px","150px"];
+    let maxWidtharr = ["", "150px", "150px", "50px", "150px","150px"];
     let tdTape = ["","text", "date", "checkbox", "text", "number"];
     let rows = document.getElementById("myTable").getElementsByTagName("TR");
 
     for (i = 1; i < rows.length; i++) {
-        var td = rows[i].getElementsByTagName("TD");
+        let td = rows[i].getElementsByTagName("TD");
         if (td[0].innerHTML == id) {
             for (let j = 1; j < td.length - 1; j++) {
-                var input = document.createElement('input');
+                let input = document.createElement('input');
                 input.style.maxWidth = maxWidtharr[j];
 
                 let s = td[j].innerHTML.trim();
@@ -68,23 +68,23 @@ function editPerson(id) {
                 td[j].innerHTML = "";
                 td[j].appendChild(input);
             }
-            var edit = td[td.length - 1].getElementsByTagName("input")[0];
+            let edit = td[td.length - 1].getElementsByTagName("input")[0];
             edit.value = "Save";
-            edit.onclick = () => { saveBook(id) };
+            edit.onclick = () => { savePerson(id) };
         }
     }
 }
 
-function saveBook(id) {
-    var datatext = [];
-    var rows = document.getElementById("myTable").getElementsByTagName("TR");
+function savePerson(id) {
+    let datatext = [];
+    let rows = document.getElementById("myTable").getElementsByTagName("TR");
 
     for (i = 1; i < rows.length; i++) {
-        var td = rows[i].getElementsByTagName("TD");
+        let td = rows[i].getElementsByTagName("TD");
 
         if (td[0].innerHTML == id) {
             for (let j = 1; j < td.length - 1; j++) {
-                var text = td[j].firstChild.value;
+                let text = td[j].firstChild.value;
 
                 if (j == 3)
                     text = td[j].firstChild.checked + '';
@@ -94,23 +94,42 @@ function saveBook(id) {
                 datatext[j] = text;
             }
 
-            var edit = td[td.length - 1].getElementsByTagName("input")[0];
+            let edit = td[td.length - 1].getElementsByTagName("input")[0];
             edit.value = "Edit";
-            edit.onclick = () => { EditBook(id) };            
+            edit.onclick = () => { editPerson(id) };
+
+            $.ajax({
+                type: "POST",
+                url: "/Home/Edit",
+                data: {
+                    'id': id,
+                    'name': datatext[1],
+                    'data': datatext[2],
+                    'married': datatext[3],
+                    'phone': datatext[4],
+                    'salary': datatext[5]
+                }
+            });            
+            break;
+        }
+    }    
+}
+
+function deletePerson(id) {
+
+    var rows = document.getElementById("myTable").getElementsByTagName("TR");
+    for (i = 1; i < rows.length; i++) {
+
+        if (rows[i].getElementsByTagName("TD")[0].innerHTML == id) {
+            rows[i].remove();
+
+            $.ajax({
+                type: "POST",
+                url: "/Home/Delete",
+                data: { 'id': id }
+            });
+
             break;
         }
     }
-
-    $.ajax({
-        type: "POST",
-        url: "/Home/Edit",
-        data: {
-            'id': id,
-            'name': datatext[1],
-            'data': datatext[2],
-            'married': datatext[3],
-            'phone': datatext[4],
-            'salary': datatext[5]
-        }
-    });
 }
