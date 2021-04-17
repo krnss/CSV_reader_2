@@ -9,16 +9,10 @@ namespace CSV_reader_2.Models
     public class Person : IPerson
     {
         public Person(){}
-        public Person(int id, string name, DateTime dateOfBirth, bool married, string phone, decimal salary)
-        {
-            ID = id;
-            Name = name;
-            DateOfBirth = dateOfBirth;
-            Married = married;
-            Phone = phone;
-            Salary = salary;
-        }
-        public Person(int id, string name, string dateOfBirth, string married, string phone, string salary)
+        public Person(int id, string name, DateTime dateOfBirth, bool married, string phone, decimal salary)=>
+            (ID, Name, DateOfBirth, Married, Phone, Salary) = (id, name, dateOfBirth, married, phone, salary);
+
+        public Person(int id, string name, string dateOfBirth, string married, string phone, string salary)             
         {
             ID = id;
             Name = name;

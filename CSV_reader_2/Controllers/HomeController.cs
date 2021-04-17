@@ -48,24 +48,15 @@ namespace CSV_reader_2.Controllers
             db.SaveChanges();
         }
 
-
         [HttpGet]
         public ActionResult GetFile()
         {
-            // Путь к файлу
             string file_path = Server.MapPath("~/Files/AllPerson.csv");
-
-            using (var writer = new StreamWriter(file_path))
-            using (var csv = new CsvWriter(writer, CultureInfo.InvariantCulture))
-            {
-                csv.WriteRecords(db.Persons);
-            }
-            
-            // Тип файла - content-type
             string file_type = "application/csv";
-            // Имя файла - необязательно
-            string file_name = "AllPerson.csv";
-            return File(file_path, file_type, file_name);
+
+            new CsvPerson().SaveAllPersonToFile(file_path, db.Persons);
+
+            return File(file_path, file_type);
         }
     }
 }

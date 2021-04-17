@@ -1,4 +1,5 @@
-﻿using CSV_reader_2.Models;
+﻿using CSV_reader_2.CSV;
+using CSV_reader_2.Models;
 using CsvHelper;
 using System;
 using System.Collections.Generic;
@@ -21,5 +22,14 @@ namespace CSV_reader_2.CSV
                 return csv.GetRecords<Person>();              
             }
         } 
+
+        public void SaveAllPersonToFile(string file_path ,IEnumerable<Person> people)
+        {
+            using (var writer = new StreamWriter(file_path))
+            using (var csv = new CsvWriter(writer, CultureInfo.InvariantCulture))
+            {
+                csv.WriteRecords(people);
+            }
+        }
     }
 }
